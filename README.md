@@ -11,7 +11,54 @@ Install:
 npm install --save @lib/hilbert
 ```
 
-Now create a file `hilbert.ts`:
+## API
+
+***ƒ*** `interleave(t: number): number`
+
+Interleave bits with 0, so input bits are stored in odd bits and even bits are zeroed.
+Equivalent to Morton code with one coordinate as the input and the other zero.
+
+- `t`: Unsigned 16-bit integer.
+
+***ƒ*** `deinterleave(t: number): number`
+
+De-interleave, dropping even bits and packing the remaining bits into the output.
+
+- `t`: Unsigned 32-bit integer.
+
+***ƒ*** `grayCode(t: number): number`
+
+Compute Gray code, reverse operation of `prefixScan`.
+
+- `t`: Unsigned 32-bit integer.
+
+***ƒ*** `prefixScan(t: number): number`
+
+Reverse operation of grayCode.
+Every number becomes the parity of the number ignoring its less significant bits.
+
+- `t`: Unsigned 32-bit integer.
+
+***ƒ*** `n2xy(lo: number, hi: number, xy: { x: number, y: number }): { x: number, y: number }`
+
+Calculate coordinates (x, y) along 2D Hilbert curve at a 64-bit position.
+
+- `hi`: 32 most significant bits of index along curve.
+- `lo`: 32 least significant bits of index along curve.
+- `xy`: Output object, x and y fields will be set.
+- Returns: Given output object.
+
+***ƒ*** `xy2n(x: number, y: number, index?: { lo: number, hi: number }): number`
+
+Calculate 64-bit position along 2D Hilbert curve at coordinates (x, y).
+- `x`: X coordinate, unsigned 32-bit integer.
+- `y`: Y coordinate, unsigned 32-bit integer.
+- `index`: Optional output object, hi and lo fields will be set to accurate 64-bit integer halves.
+- Returns: Position along curve accurate to 53 bits.
+
+## Example
+
+Create a file `hilbert.ts`:
 
 ```TypeScript
 import { n2xy, xy2n } from '@lib/hilbert';
@@ -36,7 +83,11 @@ for(let y = 0; y < size; ++y) {
             n2xy(n - 1, 0, prev);
             n2xy(n + 1, 0, next);
 
-            const s = (x + y && 2) + (((prev.x - x ^ next.x - x) + 2 & 3) * 5 & 6) + (prev.y + next.y - y * 2 & 4);
+            const s = (
+                (x + y && 2) +
+                (((prev.x - x ^ next.x - x) + 2 & 3) * 5 & 6) +
+                (prev.y + next.y - y * 2 & 4)
+            );
 
             out += style.substring(s, s + 2);
         }

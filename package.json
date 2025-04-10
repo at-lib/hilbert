@@ -1,6 +1,6 @@
 {
   "name": "@lib/hilbert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert fast between 64-bit index and 2D Hilbert curve coordinates",
   "license": "0BSD",
   "author": "Juha Järvi",
