@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"strict": true
+	},
+	"files": [
+		"hilbert.test.ts"
+	]
+}
