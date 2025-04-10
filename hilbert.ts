@@ -48,15 +48,17 @@ export function prefixScan(t: number): number {
 
 /** Calculate coordinates (x, y) along 2D Hilbert curve at a 64-bit position.
   *
-  * @param hi 32 most significant bits of index along curve.
   * @param lo 32 least significant bits of index along curve.
-  * @param xy Output object, x and y fields will be set.
-  * @return Given output object. */
+  * @param hi Optional 32 most significant bits of index along curve.
+  * @param xy Optional output object, x and y fields will be set.
+  * @return Given or new output object. */
 
-export function n2xy(lo: number, hi: number, xy: { x: number, y: number }): { x: number, y: number } {
+export function n2xy(lo: number, hi?: number, xy?: { x: number, y: number }): { x: number, y: number } {
+	hi = hi || 0;
 	const odd = (deinterleave(hi) << 16) | deinterleave(lo);
 	const even = (deinterleave(hi >>> 1) << 16) | deinterleave(lo >>> 1);
 
+	xy = xy || {} as { x: number, y: number };
 	xy.x = (
 		(odd & prefixScan(~(odd | even))) ^
 		(~odd & prefixScan(odd & even)) ^

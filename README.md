@@ -39,14 +39,14 @@ Every number becomes the parity of the number ignoring its less significant bits
 
 - `t`: Unsigned 32-bit integer.
 
-***ƒ*** `n2xy(lo: number, hi: number, xy: { x: number, y: number }): { x: number, y: number }`
+***ƒ*** `n2xy(lo: number, hi?: number, xy?: { x: number, y: number }): { x: number, y: number }`
 
 Calculate coordinates (x, y) along 2D Hilbert curve at a 64-bit position.
 
-- `hi`: 32 most significant bits of index along curve.
 - `lo`: 32 least significant bits of index along curve.
-- `xy`: Output object, x and y fields will be set.
-- Returns: Given output object.
+- `hi`: Optional 32 most significant bits of index along curve.
+- `xy`: Optional output object, x and y fields will be set.
+- Returns: Given or new output object.
 
 ***ƒ*** `xy2n(x: number, y: number, index?: { lo: number, hi: number }): number`
 
@@ -58,7 +58,16 @@ Calculate 64-bit position along 2D Hilbert curve at coordinates (x, y).
 
 ## Example
 
-Create a file `hilbert.ts`:
+```
+import { n2xy, xy2n } from '@lib/hilbert';
+
+const { x, y } = n2xy(123);
+
+console.log(x, y) // Prints 5 8
+console.log(xy2n(5, 8)); // Prints 123
+```
+
+For more fun, create a file `hilbert.ts`:
 
 ```TypeScript
 import { n2xy, xy2n } from '@lib/hilbert';
@@ -122,7 +131,10 @@ It should print:
  <-- Needs more Unicode                      Needs more monospace -->
 ```
 
-Thanks to [rawrunprotected](https://threadlocalmutex.com/?p=126).
+## More information
+
+- [Hilbert curve](https://en.wikipedia.org/wiki/Hilbert_curve) on Wikipedia.
+- Thanks to [rawrunprotected](https://threadlocalmutex.com/?p=126) for the clean bit parallel algorithm.
 
 # License
 
